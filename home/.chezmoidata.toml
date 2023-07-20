@@ -1,17 +1,17 @@
 [gpg]
-pubkey_url = "https://kerembozdas.com/pubkey.asc"
-fingerprint = "1B01B3C4EEFBE1730136D89338FD2B3F677F9C34"
+pubkey_url = ""
+fingerprint = ""
 
 [git.init]
 default_branch = "master"
 
 [git.user]
-name = "Kerem Bozdas"
-email = "krmbzds.github@gmail.com"
-signing_key = "38FD2B3F677F9C34"
+name = "Burak Ersoy"
+email = "burakersoy@msn.com"
+signing_key = ""
 
 [git.commit]
-gpgsign = "true"
+gpgsign = "false"
 
 [prefs]
 editor = "nvim"
@@ -31,10 +31,10 @@ font_crosextra = true
 font_source_code_pro = true
 
 [dependencies]
-anki = true
+anki = false
 zeal = true
-faas = true
-meld = true
+faas = false
+meld = false
 brave = true
 broot = true
 geary = false
@@ -44,12 +44,12 @@ evince = false
 zathura = true
 flatpak = true
 newsboat = true
-brave_beta = true
+brave_beta = false
 difftastic = true
 whispercpp = true
 libreoffice = false
 taskwarrior = true
-sublime_text = false
+sublime_text = true
 simple_scanner = false
 signal_messenger = true
 
@@ -102,15 +102,15 @@ tmux = true
 vale = true
 cheat = true
 delta = true
-doctl = true
+doctl = false
 viddy = true
 direnv = true
 neovim = true
 stylua = true
-kubectl = true
+kubectl = false
 lazygit = true
 ripgrep = true
-terraform = true
+terraform = false
 lazydocker = true
 shellcheck = true
 github_cli = true
@@ -119,15 +119,15 @@ github_cli = true
 ipv6 = false
 
 [hardware.logitech.c920]
-disable_microphone = true
+disable_microphone = false
 
 [hardware.logitech.mx_anywhere_2s]
-enabled = true
+enabled = false
 dpi = 400
 device_name = "Anywhere 2S"
 
 [hardware.skyloong.gk61x]
-enabled = true
+enabled = false
 remap_caps_lock = true
 remap_shift = false
 device_link = "/dev/input/by-id/usb-SEMITEK_USB-HID_Gaming_Keyboard_SN0000000001-event-kbd"
@@ -137,4 +137,4 @@ enabled = true
 scrolling_pixel_distance = 50
 
 [hardware.ledger.nano_s]
-enabled = true
+enabled = false
