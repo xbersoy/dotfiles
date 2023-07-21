@@ -1,6 +1,6 @@
 [gpg]
 pubkey_url = "https://github.com/xbersoy.gpg"
-fingerprint = "F11E1217C0B98921D37524D8F2DF4A98BFCE9815"
+fingerprint = "CD9BBE28A8A361890CE259FBED10AA39"
 
 [git.init]
 default_branch = "master"
@@ -8,10 +8,10 @@ default_branch = "master"
 [git.user]
 name = "Burak Ersoy"
 email = "burakersoy@msn.com"
-signing_key = "F2DF4A98BFCE9815"
+signing_key = "CD9BBE28A8A361890CE259FBED10AA39"
 
 [git.commit]
-gpgsign = "true"
+gpgsign = "false"
 
 [prefs]
 editor = "nvim"
