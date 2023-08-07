@@ -1,7 +1,0 @@
-bozdas
-bundler
-dotfile
-gemfile
-kerem
-rubygems
-zsh

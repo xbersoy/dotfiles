@@ -1,3 +1,0 @@
-{{- if .hardware.logitech.c920.disable_microphone -}}
-ACTION=="add", SUBSYSTEMS=="usb", ATTRS{idVendor}=="046d", ATTRS{idProduct}=="082d", ATTR{bInterfaceClass}=="01", ATTR{authorized}="0"
-{{- end -}}

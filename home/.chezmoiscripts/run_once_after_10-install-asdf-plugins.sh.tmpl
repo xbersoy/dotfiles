@@ -60,74 +60,10 @@ function install_asdf_plugins() {
   true
 }
 
-function install_zeal_cli() {
-  {{ if .dependencies.zeal }}
-  local cmd
-  local url
-  local executable
-  local cmd='curl -fsSL'
-  local url='https://api.github.com/repos/Morpheus636/zeal-cli/releases/latest'
-  local executable={{ .chezmoi.homeDir }}/bin/zeal-cli
-  if [ -n "$GITHUB_TOKEN" ]; then
-    cmd="$cmd --header 'Authorization: token $GITHUB_TOKEN'"
-  fi
-  eval "$cmd $url" | grep 'browser_' | cut -d\" -f4 | xargs curl -s -L --output "$executable"
-  chmod +x "$executable"
-  {{ else }}
-  true
-  {{ end }}
-}
-
-function install_zeal_docsets() {
-  {{ if lookPath "zeal-cli" }}
-    mkdir -p "{{ .chezmoi.homeDir }}/.local/share/Zeal/Zeal/docsets"
-    {{ if .asdf.lua }}
-      zeal-cli install Lua_5.1 || true
-    {{ end }}
-    {{ if .asdf.ruby }}
-      zeal-cli install Ruby_3 || true
-      zeal-cli install Ruby_on_Rails_7 || true
-    {{ end }}
-    true
-  {{ else }}
-    true
-  {{ end }}
-}
-
-function install_community_cheats() {
-  mkdir -p {{ .chezmoi.homeDir -}}/.config/cheat/cheatsheets/personal
-  git clone "https://github.com/cheat/cheatsheets" "{{ .chezmoi.homeDir -}}/.config/cheat/cheatsheets/community/" || true
-}
-
-function install_github_cli_extensions() {
-  {{ if (and (lookPath "go") .asdf.github_cli) }}
-    gh auth login
-    gh extension install gennaro-tedesco/gh-f || true
-    gh extension install gennaro-tedesco/gh-i || true
-    gh extension install gennaro-tedesco/gh-s || true
-    gh extension install dlvhdr/gh-dash || true
-  {{ else }}
-    true
-  {{ end }}
-}
-
-function install_vale_styles() {
-  {{ if (and (lookPath "vale") .asdf.vale) }}
-    mkdir -p "{{- .chezmoi.homeDir -}}/.local/share/vale/styles"
-    vale sync
-  {{ else }}
-    true
-  {{ end }}
-}
-
 # ****************************************************************************
 # *                                Main Script                               *
 # ****************************************************************************
 
 install_asdf_plugins
-install_zeal_cli && install_zeal_docsets
-install_community_cheats
-install_github_cli_extensions
-install_vale_styles
 
 {{ end }}

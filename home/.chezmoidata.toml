@@ -16,7 +16,7 @@ gpgsign = "false"
 [prefs]
 editor = "nvim"
 visual = "nvim"
-dracula_pro = true
+dracula_pro = false
 dracula_pro_url = "https://github.com/krmbzds/dracula-pro"
 
 [fonts]
@@ -32,34 +32,34 @@ font_source_code_pro = true
 
 [dependencies]
 anki = false
-zeal = true
+zeal = false
 faas = false
 meld = false
-brave = true
-broot = true
+brave = false
+broot = false
 geary = false
 totem = false
 docker = true
 evince = false
-zathura = true
+zathura = false
 flatpak = true
-newsboat = true
+newsboat = false
 brave_beta = false
-difftastic = true
-whispercpp = true
+difftastic = false
+whispercpp = false
 libreoffice = false
-taskwarrior = true
-sublime_text = true
+taskwarrior = false
+sublime_text = false
 simple_scanner = false
-signal_messenger = true
+signal_messenger = false
 
 [gnome]
-dracula = true
+dracula = false
 enable_animations = false
 logout_prompt = false
 natural_scroll = true
 static_workspaces = true
-workspace_count = 4
+workspace_count = 2
 
 [gnome.desktop]
 icons = false
@@ -75,11 +75,6 @@ center_window = "<Super>c"
 [gnome.dash_to_dock]
 autohide = true
 position  = "LEFT"
-
-[gnome.pop_cosmic]
-show_application_menu = false
-show_workspaces_button = false
-workspace_picker_left = true
 
 [asdf]
 enabled = true
@@ -115,26 +110,6 @@ lazydocker = true
 shellcheck = true
 github_cli = true
 
-[network]
-ipv6 = false
-
-[hardware.logitech.c920]
-disable_microphone = false
-
-[hardware.logitech.mx_anywhere_2s]
-enabled = false
-dpi = 400
-device_name = "Anywhere 2S"
-
-[hardware.skyloong.gk61x]
-enabled = false
-remap_caps_lock = true
-remap_shift = false
-device_link = "/dev/input/by-id/usb-SEMITEK_USB-HID_Gaming_Keyboard_SN0000000001-event-kbd"
-
 [hardware.huawei.gxtp7863.touchpad]
 enabled = true
 scrolling_pixel_distance = 50
-
-[hardware.ledger.nano_s]
-enabled = false

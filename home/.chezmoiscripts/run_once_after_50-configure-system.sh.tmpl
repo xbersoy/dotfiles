@@ -15,113 +15,9 @@ function install_and_configure_tpm() {
   fi
 }
 
-function rebuild_bat_cache() {
-  {{ if lookPath "batcat" }}
-  batcat cache --build
-  {{ else if lookPath "bat" }}
-  bat cache --build
-  {{ else }}
-  true
-  {{ end }}
-}
-
-function download_sponsor_times() {
-  {{ if .dependencies.newsboat }}
-    local sponsorblock_dir
-    sponsorblock_dir="{{ .chezmoi.homeDir -}}/.local/share/sponsorblock"
-    mkdir -p "$sponsorblock_dir"
-    wget -c "https://sb.ltn.fi/database/sponsorTimes.csv" -O "$sponsorblock_dir/timestamps.csv"
-  {{ else }}
-    true
-  {{ end }}
-}
-
 # ****************************************************************************
 # *                                    UI                                    *
 # ****************************************************************************
-
-function download_dracula_theme() {
-  {{ if .gnome.dracula }}
-  local dracula_folder
-  local dracula_url
-  dracula_folder="{{ .chezmoi.homeDir -}}/.config/dracula"
-  dracula_url="https://github.com/dracula/dracula-theme"
-  if [ ! -d "$dracula_folder" ] ; then
-      git clone $dracula_url $dracula_folder
-  else
-      git -C $dracula_folder pull
-  fi
-  git -C $dracula_folder submodule update --init themes/gtk
-
-  mkdir -p "{{ .chezmoi.homeDir }}/.local/share/backgrounds/dracula"
-  wget "https://raw.githubusercontent.com/dracula/wallpaper/master/first-collection/pop.png" -O "{{ .chezmoi.homeDir }}/.local/share/backgrounds/dracula/pop.png"
-  gsettings set org.gnome.desktop.background picture-uri-dark "file://{{- .chezmoi.homeDir -}}/.local/share/backgrounds/dracula/pop.png"
-  {{ else }}
-  true
-  {{ end }}
-}
-
-function download_dracula_pro_theme() {
-  {{ if .prefs.dracula_pro }}
-  local dracula_pro_folder
-  local dracula_pro_url
-  dracula_pro_folder="{{ .chezmoi.homeDir -}}/.config/dracula-pro"
-  dracula_pro_url="{{ .prefs.dracula_pro_url }}"
-  if grep -q "krmbzds" <<< "$dracula_pro_url"; then
-    dracula_pro_url="https://oauth2:$(echo 'tvguho_cng_11NNXEH6L05VZPQmsvPOp5_kKsKqVY9ZcNypd1O4jjCxU4k2YLemD83GkAofVPdzCuJVNGFNY5HEOiyMFI' | tr 'A-Za-z' 'N-ZA-Mn-za-m')@github.com/krmbzds/dracula-pro"
-  fi
-  if [ ! -d "$dracula_pro_folder" ] ; then
-      git clone "$dracula_pro_url" "$dracula_pro_folder"
-  else
-      git -C "$dracula_pro_folder" pull
-  fi
-  {{ else }}
-  true
-  {{ end }}
-}
-
-function install_gnome_user_themes_extension() {
-  {{ if .gnome.dracula }}
-  local gnome_shell_version_major
-  gnome_shell_version_major=$(gnome-shell --version 2>/dev/null | awk '{print $NF}' | cut -d. -f1)
-  {{ .chezmoi.homeDir -}}/bin/gnome-shell-extension-installer 19 --yes --gnome-version "$gnome_shell_version_major"
-  {{ else }}
-  true
-  {{ end }}
-}
-
-function enable_gnome_user_themes_extension() {
-  {{ if .gnome.dracula }} gnome-extensions enable user-theme@gnome-shell-extensions.gcampax.github.com {{ else }} true {{ end }}
-}
-
-function disable_desktop_icons_extension() {
-  {{ if .gnome.desktop.icons -}}
-  true
-  {{ else }}
-  gnome-extensions disable "ding@rastersoft.com"
-  {{ end }}
-}
-
-function set_user_theme_to_dracula() {
-  {{ if .gnome.dracula }}
-  gsettings set org.gnome.desktop.interface gtk-theme "Dracula-dark"
-  gsettings set org.gnome.desktop.wm.preferences theme "Dracula-dark"
-  gsettings --schemadir {{ .chezmoi.homeDir -}}/.local/share/gnome-shell/extensions/user-theme@gnome-shell-extensions.gcampax.github.com/schemas set org.gnome.shell.extensions.user-theme name "Dracula-dark"
-  gsettings set org.gnome.shell.extensions.pop-shell hint-color-rgba "#9580FF"
-  {{ else }}
-  true
-  {{ end }}
-}
-
-function restart_gnome_shell() {
-  {{ if .gnome.dracula }}
-  killall -HUP gnome-shell
-  echo "(sleep 3) Restarting GNOME Shell ..."
-  sleep 3
-  {{ else }}
-  true
-  {{ end }}
-}
 
 function configure_static_workspaces() {
   {{ if .gnome.static_workspaces }}
@@ -159,21 +55,6 @@ function configure_gnome_dash_to_dock() {
   gsettings set org.gnome.shell.extensions.dash-to-dock dock-position {{ .gnome.dash_to_dock.position  }}
 }
 
-function configure_gnome_pop_cosmic() {
-  gsettings set org.gnome.shell.extensions.pop-cosmic show-application-menu {{ .gnome.pop_cosmic.show_application_menu }}
-  gsettings set org.gnome.shell.extensions.pop-cosmic show-workspaces-button {{ .gnome.pop_cosmic.show_workspaces_button }}
-  gsettings set org.gnome.shell.extensions.pop-cosmic workspace-picker-left {{ .gnome.pop_cosmic.workspace_picker_left }}
-}
-
-function disable_ipv6() {
-  {{ if not .network.ipv6 -}}
-    sudo kernelstub -a "ipv6.disable=1"
-    echo "disable_ipv6: kernelstub changes require reboot to take effect..."
-  {{ else -}}
-  true
-  {{ end -}}
-}
-
 # ****************************************************************************
 # *                                 Defaults                                 *
 # ****************************************************************************
@@ -197,43 +78,21 @@ function set_alacritty_as_default_terminal_emulator() {
   {{ end }}
 }
 
-function set_zathura_as_default_pdf_viewer() {
-  {{ if (and .dependencies.zathura (lookPath "zathura")) }}
-  xdg-mime default org.pwmt.zathura.desktop application/pdf
-  {{ else }}
-  true
-  {{ end }}
-}
-
 function update_alternatives() {
   set_neovim_as_default_editor
   set_alacritty_as_default_terminal_emulator
-  set_zathura_as_default_pdf_viewer
 }
-
 
 # ****************************************************************************
 # *                                Main Script                               *
 # ****************************************************************************
 
-download_dracula_theme
-download_dracula_pro_theme
-install_gnome_user_themes_extension || true
-set_user_theme_to_dracula
 configure_static_workspaces {{ .gnome.workspace_count }}
 set_logout_confirmation_prompt {{ .gnome.logout_prompt }}
 configure_gnome
 configure_gnome_dash_to_dock
-configure_gnome_pop_cosmic
-restart_gnome_shell
-enable_gnome_user_themes_extension
-
-rebuild_bat_cache
 
 install_and_configure_tpm
 update_alternatives
-download_sponsor_times
-
-disable_ipv6
 
 {{ end }}
